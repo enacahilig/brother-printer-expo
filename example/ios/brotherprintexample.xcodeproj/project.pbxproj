@@ -33,7 +33,6 @@
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = brotherprintexample/SplashScreen.storyboard; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
 		BD02673C2B62E4F2004B0ED3 /* BRLMPrinterKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = BRLMPrinterKit.xcframework; path = ../../../../3Strand/brotherprinter/ios/libs/BRLMPrinterKit.xcframework; sourceTree = "<group>"; };
-		BD0267402B62E925004B0ED3 /* BRLMPrinterKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = BRLMPrinterKit.xcframework; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-brotherprintexample/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -80,7 +79,6 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				BD0267402B62E925004B0ED3 /* BRLMPrinterKit.xcframework */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
