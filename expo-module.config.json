@@ -1,0 +1,9 @@
+{
+  "platforms": ["apple", "android", "web"],
+  "apple": {
+    "modules": ["BrotherPrintModule"]
+  },
+  "android": {
+    "modules": ["expo.modules.brotherprint.BrotherPrintModule"]
+  }
+}
