@@ -5,7 +5,7 @@ import * as BrotherPrint from 'brother-print';
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>{BrotherPrint.hello()}</Text>
+      <Text>{BrotherPrint.startSearchWiFiPrinter()}</Text>
     </View>
   );
 }
