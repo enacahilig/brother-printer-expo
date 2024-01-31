@@ -20,6 +20,7 @@ export default function App() {
       return <Text> {printer.modelName} </Text>;
     });
   };
+
   return (
     <View style={styles.container}>
       <View style={styles.buttonContainer}>
