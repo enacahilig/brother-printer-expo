@@ -7,7 +7,7 @@ export default function App() {
   const [printerMessage, setPrinterMessage] = useState("");
 
   const onFindPrinterViaWifi = async () => {
-    const [printersArray] = await BrotherPrint.startSearchWiFiPrinter();
+    const printersArray = await BrotherPrint.startSearchWiFiPrinter();
     if (Array.isArray(printersArray)) {
       setPrinters(printersArray);
     } else {
@@ -16,13 +16,9 @@ export default function App() {
   };
 
   const displayPrinters = () => {
-    if (Array.isArray(printers)) {
-      return printers.map((printer, index) => {
-        return <Text> {printer.modelName} </Text>;
-      });
-    } else {
-      return printers;
-    }
+    return printers.map((printer, index) => {
+      return <Text> {printer.modelName} </Text>;
+    });
   };
   return (
     <View style={styles.container}>
@@ -34,7 +30,7 @@ export default function App() {
         />
       </View>
       <Text>{displayPrinters()}</Text>
-      <Text>{printerMessage} </Text>;
+      <Text>{printerMessage}</Text>
     </View>
   );
 }
