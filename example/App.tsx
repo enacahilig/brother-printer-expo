@@ -15,6 +15,15 @@ export default function App() {
     }
   };
 
+  const onFindPrinterViaBluetooth = async () => {
+    const printersArray = await BrotherPrint.startSearchBluetoothPrinter();
+    if (Array.isArray(printersArray)) {
+      setPrinters(printersArray);
+    } else {
+      setPrinterMessage(printersArray);
+    }
+  };
+
   const displayPrinters = () => {
     return printers.map((printer, index) => {
       return <Text> {printer.modelName} </Text>;
@@ -27,6 +36,13 @@ export default function App() {
         <Button
           onPress={() => onFindPrinterViaWifi()}
           title="Find Printers via Wifi"
+          color="white"
+        />
+      </View>
+      <View style={styles.buttonContainer}>
+        <Button
+          onPress={() => onFindPrinterViaBluetooth()}
+          title="Find Printers via Bluetooth"
           color="white"
         />
       </View>
