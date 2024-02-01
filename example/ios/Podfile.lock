@@ -1,8 +1,8 @@
 PODS:
   - boost (1.83.0)
-  - BRLMPrinterKit_4.6.7 (4.6.7)
+  - BRLMPrinterKit_4.6.7 (4.6.12)
   - BrotherPrint (0.1.0):
-    - BRLMPrinterKit_4.6.7
+    - BRLMPrinterKit_4.6.7 (~> 4.6.12)
     - ExpoModulesCore
   - DoubleConversion (1.1.6)
   - EXConstants (15.4.5):
@@ -1259,8 +1259,8 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
-  BRLMPrinterKit_4.6.7: 2b19819246248421b3b25f21812535efc021e9cf
-  BrotherPrint: 3a45ceac8117aae69bb9f2c5365af134986e161f
+  BRLMPrinterKit_4.6.7: bff996a14b4aac906e668d7ac4fc830845462f8a
+  BrotherPrint: 22563b658cc40c55315331785a5394d73bbc5c52
   DoubleConversion: fea03f2699887d960129cc54bba7e52542b6f953
   EXConstants: 988aa430ca0f76b43cd46b66e7fae3287f9cc2fc
   EXFont: 21b9c760abd593ce8f0d5386b558ced76018506f

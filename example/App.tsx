@@ -17,6 +17,7 @@ export default function App() {
 
   const onFindPrinterViaBluetooth = async () => {
     const printersArray = await BrotherPrint.startSearchBluetoothPrinter();
+    console.log(printersArray, "printersArray");
     if (Array.isArray(printersArray)) {
       setPrinters(printersArray);
     } else {
