@@ -57,7 +57,7 @@ public class BrotherPrintModule: Module {
         let devices = BRPtouchBluetoothManager.shared().pairedDevices()  as! [BRPtouchDeviceInfo]; //discover bluetooth printers
 
         let foundPrinters: NSMutableArray = []
-         for deviceInfo in devices { //there should only be one
+        for deviceInfo in devices { //there should only be one
             if let deviceInfo = deviceInfo as? BRPtouchDeviceInfo {
               let printerObject: NSMutableDictionary = [:]
               printerObject["modelName"] = deviceInfo.strModelName
@@ -68,18 +68,16 @@ public class BrotherPrintModule: Module {
         }
         promise.resolve(foundPrinters);*/
 
-        let option = BRLMBLESearchOption()
-        option.searchDuration = 15
-        let foundPrinters: NSMutableArray = []
-        let result = BRLMPrinterSearcher.startBLESearch(option) { channel in
+        let devices =  BRLMPrinterSearcher.startBluetoothSearch().channels;
+        for channel in devices { 
             let modelName = channel.extraInfo?.value(forKey: BRLMChannelExtraInfoKeyModelName) as? String ?? ""
-            let advertiseLocalName = channel.channelInfo
+            let ipaddress = channel.channelInfo
             let serialNumber = channel.extraInfo?.value(forKey: BRLMChannelExtraInfoKeySerialNumber) as? String ?? ""
-            print("Model : \(modelName), AdvertiseLocalName: \(advertiseLocalName)")
 
+            //create printerObject
             let printerObject: NSMutableDictionary = [:]
             printerObject["modelName"] = modelName
-            printerObject["advertiseLocalName"] = advertiseLocalName
+            printerObject["ipAddress"] = ipaddress
             printerObject["serialNumber"] = serialNumber
             printerObject["channelData"] = channel
             printerObject["type"] = "bluetooth"
