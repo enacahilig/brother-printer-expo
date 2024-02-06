@@ -26,6 +26,8 @@ export default function App() {
     modelName: "",
     serialNumber: "",
     printerName: "",
+    ipAddress: "",
+    type: "",
   });
   const [selectedPrinterIndex, setSelectedPrinterIndex] = useState(-1);
 
@@ -59,8 +61,9 @@ export default function App() {
       //return; //uncomment this line when testing and you want to conserve label paper by not printing
       const status = await BrotherPrint.printSamplePDF(
         selectedPrinter.modelName,
+        selectedPrinter.ipAddress,
         selectedPrinter.serialNumber,
-        selectedPrinter.printerName,
+        selectedPrinter.type,
       );
       alert(`Printing response: ${status}`);
     } else {

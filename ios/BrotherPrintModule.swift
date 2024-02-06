@@ -13,6 +13,7 @@ public class BrotherPrintModule: Module {
       #if targetEnvironment(simulator)
         promise.resolve("Cannot find printers via wifi when using a simulator.");    
       #else
+        /* Commenting prev code for now
         let manager = BRPtouchNetworkManager();
         manager.startSearch(5);
         let devices = manager.getPrinterNetInfo()  as! [BRPtouchDeviceInfo];
@@ -22,7 +23,26 @@ public class BrotherPrintModule: Module {
                 printers += deviceInfo.strModelName + " ";
             }
         }
-        promise.resolve( devices as! [BRPtouchDeviceInfo]);
+        promise.resolve( devices as! [BRPtouchDeviceInfo]);*/
+
+        let option = BRLMNetworkSearchOption()
+        option.searchDuration = 15
+        let foundPrinters: NSMutableArray = []
+        let result = BRLMPrinterSearcher.startNetworkSearch(option) { channel in
+            let modelName = channel.extraInfo?.value(forKey: BRLMChannelExtraInfoKeyModelName) as? String ?? ""
+            let ipaddress = channel.channelInfo
+            let serialNumber = channel.extraInfo?.value(forKey: BRLMChannelExtraInfoKeySerialNumber) as? String ?? ""
+
+            //create printerObject
+            let printerObject: NSMutableDictionary = [:]
+            printerObject["modelName"] = modelName
+            printerObject["ipAddress"] = ipaddress
+            printerObject["serialNumber"] = serialNumber
+            printerObject["channelData"] = channel
+            printerObject["type"] = "wifi"
+            foundPrinters.add(printerObject)
+        }
+        promise.resolve(foundPrinters)
       #endif 
     }
 
@@ -30,6 +50,8 @@ public class BrotherPrintModule: Module {
       #if targetEnvironment(simulator)
         promise.resolve("Cannot find printers via bluetooth when using a simulator.");    
       #else
+        /* Commenting prev code for now
+        
         let devices = BRPtouchBluetoothManager.shared().pairedDevices()  as! [BRPtouchDeviceInfo]; //discover bluetooth printers
 
         let foundPrinters: NSMutableArray = []
@@ -42,15 +64,41 @@ public class BrotherPrintModule: Module {
               foundPrinters.add(printerObject)
             }
         }
-        promise.resolve(foundPrinters);
+        promise.resolve(foundPrinters);*/
+
+        let option = BRLMBLESearchOption()
+        option.searchDuration = 15
+        let foundPrinters: NSMutableArray = []
+        let result = BRLMPrinterSearcher.startBLESearch(option) { channel in
+            let modelName = channel.extraInfo?.value(forKey: BRLMChannelExtraInfoKeyModelName) as? String ?? ""
+            let advertiseLocalName = channel.channelInfo
+            let serialNumber = channel.extraInfo?.value(forKey: BRLMChannelExtraInfoKeySerialNumber) as? String ?? ""
+            print("Model : \(modelName), AdvertiseLocalName: \(advertiseLocalName)")
+
+            let printerObject: NSMutableDictionary = [:]
+            printerObject["modelName"] = modelName
+            printerObject["advertiseLocalName"] = advertiseLocalName
+            printerObject["serialNumber"] = serialNumber
+            printerObject["channelData"] = channel
+            printerObject["type"] = "bluetooth"
+            foundPrinters.add(printerObject)
+        }
+        return result
       #endif 
     }
 
-    AsyncFunction("printSamplePDF") { (strModelName: String, strSerialNumber: String,  strPrinterName: String, promise: Promise) in
+    AsyncFunction("printSamplePDF") {( modelName: String, ipAddress: String, serialNumber: String, printerType: String, promise: Promise) in
         #if targetEnvironment(simulator)
           promise.resolve("Cannot print PDF when using a simulator.");    
         #else
-          let channel = BRLMChannel(bluetoothSerialNumber: strSerialNumber)
+
+          let channel = "";
+          if (printerType == "wifi") {
+            channel = BRLMChannel(wifiIPAddress: ipAddress) 
+          } else {
+            channel = BRLMChannel(initWithBluetoothSerialNumber: serialNumber)
+          }
+          
 
           let generateResult = BRLMPrinterDriverGenerator.open(channel)
           guard generateResult.error.code == BRLMOpenChannelErrorCode.noError,
@@ -63,7 +111,6 @@ public class BrotherPrintModule: Module {
           }
 
           // Set your paper information
-          let margins = BRLMCustomPaperSizeMargins(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
           let customPaperSize = BRLMCustomPaperSize(
             dieCutWithTapeWidth: CGFloat(4),
                                   tapeLength: CGFloat(6),
@@ -72,44 +119,30 @@ public class BrotherPrintModule: Module {
                                   unitOfLength:  BRLMCustomPaperSizeLengthUnit.inch
                               )
 
-          let myUrl = Bundle.main.url(forResource: "samplepdf2", withExtension: "pdf")
+          guard
+              let url = Bundle.main.url(forResource: "samplepdf2", withExtension: "pdf")
+              else {
+                  resolve("Error - PDF file is not found.")
+                  return
+            }
 
-          //we have to prep the BRLMPrinterModel and base that on the strModelName passed
-          //brute force, but with the guard the printSettings weren't in scope, so I put it in both the if and else
-          if (strModelName == "RJ-4230B") { //belt printer model that DDL uses
-              guard
-                let printSettings = BRLMRJPrintSettings(defaultPrintSettingsWith: BRLMPrinterModel.RJ_4230B)
-              else {
-                resolve("Error - PDF file is not found.")
-                return
-              }
-              printSettings.customPaperSize = customPaperSize
-              let printError = printerDriver.printPDF(with: myUrl!, settings: printSettings)
-              
-              if printError.code != .noError {
-                  resolve("Error - Print PDF: \(printError.code)")
-              }
-              else {
-                  resolve("Success - Print PDF")
-              }
+          //hardcoded settings for certain models for now, will make it dynamic maybe later if this is working?
+          let printSettings = BRLMRJPrintSettings(defaultPrintSettingsWith: BRLMPrinterModel.QL_1110NWB)
+
+          if (modelName == "RJ-4230B") {
+            printSettings = BRLMRJPrintSettings(defaultPrintSettingsWith: BRLMPrinterModel.RJ_4230B)
+          } else if (modelName == "QL-1110NWB") {
+            printSettings = BRLMRJPrintSettings(defaultPrintSettingsWith: BRLMPrinterModel.QL_1110NWB)
+          } 
+
+          printSettings.customPaperSize = customPaperSize
+          let printError = printerDriver.printPDF(with: myUrl!, settings: printSettings)
+          
+          if printError.code != .noError {
+              resolve("Error - Print PDF: \(printError.code)")
           }
-          else { //default to desktop printer
-              //this one uses BRLMTDPrintSettings instead of BRLMRJPrintSettings
-              guard
-                let printSettings = BRLMTDPrintSettings(defaultPrintSettingsWith: BRLMPrinterModel.TD_4550DNWB)
-              else {
-                resolve("Error - PDF file is not found.")
-                return
-              }
-              printSettings.customPaperSize = customPaperSize
-              let printError = printerDriver.printPDF(with: myUrl!, settings: printSettings)
-              
-              if printError.code != .noError {
-                  resolve("Error - Print PDF: \(printError.code)")
-              }
-              else {
-                  resolve("Success - Print PDF")
-              }
+          else {
+              resolve("Success - Print PDF")
           }
         #endif 
       }

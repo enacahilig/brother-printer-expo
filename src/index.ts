@@ -9,13 +9,15 @@ export function startSearchBluetoothPrinter() {
 }
 
 export function printSamplePDF(
-  strModelName: string,
-  strSerialNumber: string,
-  strPrinterName: string,
+  modelName: string,
+  ipAddress: string,
+  serialNumber: string,
+  printerType: string,
 ) {
   return BrotherPrint.printSamplePDF(
-    strModelName,
-    strSerialNumber,
-    strPrinterName,
+    modelName,
+    ipAddress,
+    serialNumber,
+    printerType,
   );
 }
