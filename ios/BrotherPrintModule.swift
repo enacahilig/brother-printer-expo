@@ -88,7 +88,7 @@ public class BrotherPrintModule: Module {
 
           guard
               let url = Bundle.main.url(forResource: "samplepdf2", withExtension: "pdf"),
-              let printSettings = BRLMTDPrintSettings(defaultPrintSettingsWith: BRLMPrinterModel.RJ_4230B
+              let printSettings = BRLMTDPrintSettings(defaultPrintSettingsWith: BRLMPrinterModel.RJ_4230B)
               else {
                   promise.resolve("Error - PDF file is not found.")
                   return
