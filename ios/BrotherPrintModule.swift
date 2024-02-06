@@ -100,12 +100,10 @@ public class BrotherPrintModule: Module {
           promise.resolve("Cant print pdf \(url)");    
         #else
 
-          let channel = "";
+          var channel = BRLMChannel(initWithBluetoothSerialNumber: serialNumber)
           if (printerType == "wifi") {
             channel = BRLMChannel(wifiIPAddress: ipAddress) 
-          } else {
-            channel = BRLMChannel(initWithBluetoothSerialNumber: serialNumber)
-          }
+          } 
           
 
           let generateResult = BRLMPrinterDriverGenerator.open(channel)
