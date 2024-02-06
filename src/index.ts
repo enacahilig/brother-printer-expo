@@ -5,19 +5,20 @@ export function startSearchWiFiPrinter(): string {
 }
 
 export function startSearchBluetoothPrinter() {
-  return BrotherPrint.startSearchBluetoothPrinter2();
+  console.log('startSearchBluetoothPrinter')
+  return BrotherPrint.startSearchBluetoothPrinter();
 }
 
-export function printSamplePDF(
-  modelName: string,
-  ipAddress: string,
-  serialNumber: string,
-  printerType: string,
-) {
-  return BrotherPrint.printSamplePDF(
-    modelName,
-    ipAddress,
-    serialNumber,
-    printerType,
-  );
-}
+// export function printSamplePDF(
+//   modelName: string,
+//   ipAddress: string,
+//   serialNumber: string,
+//   printerType: string,
+// ) {
+//   return BrotherPrint.printSamplePDF(
+//     modelName,
+//     ipAddress,
+//     serialNumber,
+//     printerType,
+//   );
+// }
