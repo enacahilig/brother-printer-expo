@@ -63,10 +63,13 @@ public class BrotherPrintModule: Module {
       #endif 
     }
 
-    AsyncFunction("printSamplePDF") {( modelName: String, ipAddress: String, serialNumber: String, printerType: String, promise: Promise) in
+    AsyncFunction("printSamplePDF") {( modelName: String, ipAddress: String, serialNumber: String, printerType: String, strFilePath: String, promise: Promise) in
         #if targetEnvironment(simulator)
           guard
-              let url = Bundle.main.url(forResource: "SamplePDF", withExtension: "pdf")
+              // let url = Bundle.main.url(forResource: "samplepdf2", withExtension: "pdf")
+                 let myUrlString = "file:///private/" + strFilePath,
+                 let url = URL(string: myUrlString)
+    
               else {
                   promise.resolve("Error1 - PDF file is not found.")
                   return
@@ -86,11 +89,14 @@ public class BrotherPrintModule: Module {
           defer {
               printerDriver.closeChannel()
           }
-        let url = Bundle.main.url(forResource: "SamplePDF", withExtension: "pdf")
-        print("url \(url)");
+        // let url = Bundle.main.url(forResource: "samplepdf2", withExtension: "pdf")
+        // print("url \(url)");
+        
         
           guard
-              let url = Bundle.main.url(forResource: "SamplePDF", withExtension: "pdf"),
+              // let url = Bundle.main.url(forResource: "samplepdf2", withExtension: "pdf"),
+              let myUrlString = "file:///private/" + strFilePath,
+              let url = URL(string: myUrlString),
               let printSettings = BRLMTDPrintSettings(defaultPrintSettingsWith: BRLMPrinterModel.RJ_4230B)
               else {
                   

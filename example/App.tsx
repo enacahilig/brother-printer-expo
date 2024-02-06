@@ -71,15 +71,39 @@ export default function App() {
 
   const onTestPrint = async () => {
 
+
+    const testingContainer = {
+      BarCode: "123456789",
+      ContractorNameText: "Cotnractor Text Text",
+      DeckText: "Deck TExt ",
+      FwdMidAftText: " FWd Aft Text",
+      LoadingDateText: "Test Loading Text",
+      Multiples: "1",
+      PoNumberText: "PO Num Text",
+      PrintedByText: "PrintedbyText",
+      QRCodeURL: "http://dent.ly",
+      SideText: "Side text Text",
+      ShipmentID: "Shipment 1234",
+      Description: "Description or Ipsum", //essentially the ContainerNum everything to the left of the "_"
+      ContainerTypeName: "Export",
+    }
+
     // alert('onTestPrint');
     if (selectedPrinter) {
       alert(JSON.stringify(selectedPrinter));
       //return; //uncomment this line when testing and you want to conserve label paper by not printing
+
+      const labelPDF = await generateLabelPDF([
+        testingContainer,
+      ]);
+
+
       const status = await BrotherPrint.printSamplePDF(
         selectedPrinter.modelName,
         selectedPrinter.ipAddress,
         selectedPrinter.serialNumber,
         selectedPrinter.type,
+        labelPDF.filePath
       );
       alert(`Printing response: ${status}`);
     } else {
@@ -94,6 +118,7 @@ export default function App() {
       );
     });
   };
+
 
   return (
     <SafeAreaView style={backgroundStyle}>
@@ -177,3 +202,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
+function generateLabelPDF(arg0: {
+  BarCode: string; ContractorNameText: string; DeckText: string; FwdMidAftText: string; LoadingDateText: string; Multiples: string; PoNumberText: string; PrintedByText: string; QRCodeURL: string; SideText: string; ShipmentID: string; Description: string; //essentially the ContainerNum everything to the left of the "_"
+  ContainerTypeName: string;
+}[]) {
+  throw new Error("Function not implemented.");
+}
+

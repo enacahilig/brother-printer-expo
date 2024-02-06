@@ -15,11 +15,14 @@ export function printSamplePDF(
   ipAddress: string,
   serialNumber: string,
   printerType: string,
+  strFilePath: string,
 ) {
   return BrotherPrint.printSamplePDF(
     modelName,
     ipAddress,
     serialNumber,
     printerType,
+    strFilePath,
+
   );
 }
