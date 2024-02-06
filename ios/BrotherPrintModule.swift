@@ -89,69 +89,69 @@ public class BrotherPrintModule: Module {
       #endif 
     }
 
-    // AsyncFunction("printSamplePDF") {( modelName: String, ipAddress: String, serialNumber: String, printerType: String, promise: Promise) in
-    //     #if targetEnvironment(simulator)
-    //       guard
-    //           let url = Bundle.main.url(forResource: "samplepdf2", withExtension: "pdf")
-    //           else {
-    //               promise.resolve("Error - PDF file is not found.")
-    //               return
-    //         }
-    //       promise.resolve("Cant print pdf \(url)");    
-    //     #else
+     AsyncFunction("printSamplePDF") {( modelName: String, ipAddress: String, serialNumber: String, printerType: String, promise: Promise) in
+         #if targetEnvironment(simulator)
+           guard
+               let url = Bundle.main.url(forResource: "samplepdf2", withExtension: "pdf")
+               else {
+                   promise.resolve("Error - PDF file is not found.")
+                   return
+             }
+           promise.resolve("Cant print pdf \(url)");    
+         #else
 
-    //       var channel = BRLMChannel(initWithBluetoothSerialNumber: serialNumber)
-    //       if (printerType == "wifi") {
-    //         channel = BRLMChannel(wifiIPAddress: ipAddress) 
-    //       } 
+           var channel = BRLMChannel(initWithBluetoothSerialNumber: serialNumber)
+           if (printerType == "wifi") {
+             channel = BRLMChannel(wifiIPAddress: ipAddress) 
+           } 
           
 
-    //       let generateResult = BRLMPrinterDriverGenerator.open(channel)
-    //       guard generateResult.error.code == BRLMOpenChannelErrorCode.noError,
-    //           let printerDriver = generateResult.driver else {
-    //             promise.resolve("Error - Open Channel: \(generateResult.error.code)")
-    //             return
-    //           }
-    //       defer {
-    //           printerDriver.closeChannel()
-    //       }
+           let generateResult = BRLMPrinterDriverGenerator.open(channel)
+           guard generateResult.error.code == BRLMOpenChannelErrorCode.noError,
+               let printerDriver = generateResult.driver else {
+                 promise.resolve("Error - Open Channel: \(generateResult.error.code)")
+                 return
+               }
+           defer {
+               printerDriver.closeChannel()
+           }
 
-    //       // Set your paper information
-    //       let customPaperSize = BRLMCustomPaperSize(
-    //         dieCutWithTapeWidth: CGFloat(4),
-    //                               tapeLength: CGFloat(6),
-    //                               margins: BRLMCustomPaperSizeMargins(top: 0.12, left: 0.06, bottom: 0.12, right: 0.06),
-    //                               gapLength: CGFloat(0.125),
-    //                               unitOfLength:  BRLMCustomPaperSizeLengthUnit.inch
-    //                           )
+           // Set your paper information
+           let customPaperSize = BRLMCustomPaperSize(
+             dieCutWithTapeWidth: CGFloat(4),
+                                   tapeLength: CGFloat(6),
+                                   margins: BRLMCustomPaperSizeMargins(top: 0.12, left: 0.06, bottom: 0.12, right: 0.06),
+                                   gapLength: CGFloat(0.125),
+                                   unitOfLength:  BRLMCustomPaperSizeLengthUnit.inch
+                               )
 
-    //       guard
-    //           let url = Bundle.main.url(forResource: "samplepdf2", withExtension: "pdf")
-    //           else {
-    //               promise.resolve("Error - PDF file is not found.")
-    //               return
-    //         }
+           guard
+               let url = Bundle.main.url(forResource: "samplepdf2", withExtension: "pdf")
+               else {
+                   promise.resolve("Error - PDF file is not found.")
+                   return
+             }
 
-    //       //hardcoded settings for certain models for now, will make it dynamic maybe later if this is working?
-    //       var printSettings = BRLMRJPrintSettings(defaultPrintSettingsWith: BRLMPrinterModel.QL_1110NWB)
+           //hardcoded settings for certain models for now, will make it dynamic maybe later if this is working?
+           var printSettings = BRLMRJPrintSettings(defaultPrintSettingsWith: BRLMPrinterModel.QL_1110NWB)
 
-    //       if (modelName == "RJ-4230B") {
-    //         printSettings = BRLMRJPrintSettings(defaultPrintSettingsWith: BRLMPrinterModel.RJ_4230B)
-    //       } else if (modelName == "TD-4550DNWB") {
-    //         printSettings = BRLMRJPrintSettings(defaultPrintSettingsWith: BRLMPrinterModel.TD_4550DNWB)
-    //       }
+           if (modelName == "RJ-4230B") {
+             printSettings = BRLMRJPrintSettings(defaultPrintSettingsWith: BRLMPrinterModel.RJ_4230B)
+           } else if (modelName == "TD-4550DNWB") {
+             printSettings = BRLMRJPrintSettings(defaultPrintSettingsWith: BRLMPrinterModel.TD_4550DNWB)
+           }
 
-    //       printSettings.customPaperSize = customPaperSize
-    //       let printError = printerDriver.printPDF(with: url!, settings: printSettings)
+           printSettings.customPaperSize = customPaperSize
+           let printError = printerDriver.printPDF(with: url!, settings: printSettings)
           
-    //       if printError.code != .noError {
-    //           promise.resolve("Error - Print PDF: \(printError.code)")
-    //       }
-    //       else {
-    //           promise.resolve("Success - Print PDF")
-    //       }
-    //     #endif 
-    //   }
+           if printError.code != .noError {
+               promise.resolve("Error - Print PDF: \(printError.code)")
+           }
+           else {
+               promise.resolve("Success - Print PDF")
+           }
+         #endif 
+       }
     }
 }
 
