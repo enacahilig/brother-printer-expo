@@ -137,9 +137,9 @@ public class BrotherPrintModule: Module {
 
           if (modelName == "RJ-4230B") {
             printSettings = BRLMRJPrintSettings(defaultPrintSettingsWith: BRLMPrinterModel.RJ_4230B)
-          } else if (modelName == "QL-1110NWB") {
-            printSettings = BRLMRJPrintSettings(defaultPrintSettingsWith: BRLMPrinterModel.QL_1110NWB)
-          } 
+          } else if (modelName == "TD-4550DNWB") {
+            printSettings = BRLMRJPrintSettings(defaultPrintSettingsWith: BRLMPrinterModel.TD_4550DNWB)
+          }
 
           printSettings.customPaperSize = customPaperSize
           let printError = printerDriver.printPDF(with: myUrl!, settings: printSettings)
