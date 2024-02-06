@@ -46,6 +46,8 @@ public class BrotherPrintModule: Module {
       #endif 
     }
 
+
+
     AsyncFunction("startSearchBluetoothPrinter") { (promise: Promise) in
       #if targetEnvironment(simulator)
         promise.resolve("Cannot find printers via bluetooth when using a simulator.");    
@@ -55,7 +57,7 @@ public class BrotherPrintModule: Module {
         let devices = BRPtouchBluetoothManager.shared().pairedDevices()  as! [BRPtouchDeviceInfo]; //discover bluetooth printers
 
         let foundPrinters: NSMutableArray = []
-        for deviceInfo in devices { //there should only be one
+         for deviceInfo in devices { //there should only be one
             if let deviceInfo = deviceInfo as? BRPtouchDeviceInfo {
               let printerObject: NSMutableDictionary = [:]
               printerObject["modelName"] = deviceInfo.strModelName
@@ -154,3 +156,4 @@ public class BrotherPrintModule: Module {
       }
     }
 }
+

@@ -1,5 +1,6 @@
 import { Picker } from "@react-native-picker/picker";
 import * as BrotherPrint from "brother-print";
+import * as Network from 'expo-network';
 import React, { useState } from "react";
 import {
   StyleSheet,
@@ -19,6 +20,9 @@ export default function App() {
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
+
+  //Debugging
+  const [networkState, setNetworkState] = useState<any>(null);
 
   const [printers, setPrinters] = useState<any[]>([]);
   const [printerMessage, setPrinterMessage] = useState("");
@@ -40,8 +44,12 @@ export default function App() {
     }
   };
 
+
+
   const onFindPrinterViaBluetooth = async () => {
+    console.log('onFindPrinterViaBluetooth')
     const printersArray = await BrotherPrint.startSearchBluetoothPrinter();
+    console.log('printersArray', printersArray)
     if (Array.isArray(printersArray)) {
       setPrinters(printersArray);
     } else {
@@ -55,9 +63,14 @@ export default function App() {
     });
   };
 
+  const getNetworkState = async () => {
+    setNetworkState(await Network.getNetworkStateAsync());
+    console.log('networkState', networkState)
+  }
+
   const onTestPrint = async () => {
     if (selectedPrinter) {
-      //alert(JSON.stringify(selectedPrinter));
+      alert(JSON.stringify(selectedPrinter));
       //return; //uncomment this line when testing and you want to conserve label paper by not printing
       const status = await BrotherPrint.printSamplePDF(
         selectedPrinter.modelName,

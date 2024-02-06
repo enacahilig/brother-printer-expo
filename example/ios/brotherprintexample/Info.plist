@@ -43,9 +43,11 @@
 		<true/>
 	</dict>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>Bluetooth is required for connection to printers.</string>
+	<string>This app uses the camera to scan barcodes on event tickets.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>Bluetooth is required for connection to printers.</string>
+	<string>This app uses the camera to scan barcodes on event tickets.</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>This app uses local network to communicate to BrotherPRinter</string>
 	<key>UILaunchStoryboardName</key>
 	<string>SplashScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
