@@ -92,8 +92,7 @@ public class BrotherPrintModule: Module {
               else {
                   promise.resolve("Error - PDF file is not found.")
                   return
-            }
-          )
+          }
 
           // Set your paper information
           let margins = BRLMCustomPaperSizeMargins(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
