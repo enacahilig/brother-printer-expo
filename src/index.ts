@@ -1,6 +1,7 @@
 import BrotherPrint from "./BrotherPrintModule";
 
 export function startSearchWiFiPrinter(): string {
+  console.log('startSearchWiFiPrinter')
   return BrotherPrint.startSearchWiFiPrinter();
 }
 

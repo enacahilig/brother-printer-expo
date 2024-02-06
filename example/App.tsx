@@ -37,6 +37,7 @@ export default function App() {
 
   const onFindPrinterViaWifi = async () => {
     const printersArray = await BrotherPrint.startSearchWiFiPrinter();
+    console.log('printersArray', printersArray)
     if (Array.isArray(printersArray)) {
       setPrinters(printersArray);
     } else {

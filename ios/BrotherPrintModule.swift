@@ -32,7 +32,7 @@ public class BrotherPrintModule: Module {
             let modelName = channel.extraInfo?.value(forKey: BRLMChannelExtraInfoKeyModelName) as? String ?? ""
             let ipaddress = channel.channelInfo
             let serialNumber = channel.extraInfo?.value(forKey: BRLMChannelExtraInfoKeySerialNumber) as? String ?? ""
-
+            print("modelName: \(modelName) ipaddress: \(ipaddress) serialNumber: \(serialNumber)")
             //create printerObject
             let printerObject: NSMutableDictionary = [:]
             printerObject["modelName"] = modelName
@@ -67,13 +67,15 @@ public class BrotherPrintModule: Module {
             }
         }
         promise.resolve(foundPrinters);*/
-
+            
+        let foundPrinters: NSMutableArray = []
         let devices =  BRLMPrinterSearcher.startBluetoothSearch().channels;
         for channel in devices { 
             let modelName = channel.extraInfo?.value(forKey: BRLMChannelExtraInfoKeyModelName) as? String ?? ""
             let ipaddress = channel.channelInfo
             let serialNumber = channel.extraInfo?.value(forKey: BRLMChannelExtraInfoKeySerialNumber) as? String ?? ""
-
+            print("modelName: \(modelName) ipaddress: \(ipaddress) serialNumber: \(serialNumber)")
+  
             //create printerObject
             let printerObject: NSMutableDictionary = [:]
             printerObject["modelName"] = modelName
