@@ -71,20 +71,20 @@ export default function App() {
 
   const onTestPrint = async () => {
 
-    alert('onTestPrint');
-    // if (selectedPrinter) {
-    //   alert(JSON.stringify(selectedPrinter));
-    //   //return; //uncomment this line when testing and you want to conserve label paper by not printing
-    //   const status = await BrotherPrint.printSamplePDF(
-    //     selectedPrinter.modelName,
-    //     selectedPrinter.ipAddress,
-    //     selectedPrinter.serialNumber,
-    //     selectedPrinter.type,
-    //   );
-    //   alert(`Printing response: ${status}`);
-    // } else {
-    //   alert(`Please select a printer.`);
-    // }
+    // alert('onTestPrint');
+    if (selectedPrinter) {
+      alert(JSON.stringify(selectedPrinter));
+      //return; //uncomment this line when testing and you want to conserve label paper by not printing
+      const status = await BrotherPrint.printSamplePDF(
+        selectedPrinter.modelName,
+        selectedPrinter.ipAddress,
+        selectedPrinter.serialNumber,
+        selectedPrinter.type,
+      );
+      alert(`Printing response: ${status}`);
+    } else {
+      alert(`Please select a printer.`);
+    }
   };
 
   const renderPrinterList = () => {
