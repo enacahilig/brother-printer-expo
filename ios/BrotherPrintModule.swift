@@ -133,7 +133,7 @@ public class BrotherPrintModule: Module {
             }
 
           //hardcoded settings for certain models for now, will make it dynamic maybe later if this is working?
-          let printSettings = BRLMRJPrintSettings(defaultPrintSettingsWith: BRLMPrinterModel.QL_1110NWB)
+          var printSettings = BRLMRJPrintSettings(defaultPrintSettingsWith: BRLMPrinterModel.QL_1110NWB)
 
           if (modelName == "RJ-4230B") {
             printSettings = BRLMRJPrintSettings(defaultPrintSettingsWith: BRLMPrinterModel.RJ_4230B)
