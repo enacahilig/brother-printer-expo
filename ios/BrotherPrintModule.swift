@@ -83,7 +83,7 @@ public class BrotherPrintModule: Module {
             printerObject["type"] = "bluetooth"
             foundPrinters.add(printerObject)
         }
-        return result
+        promise.resolve(foundPrinters);
       #endif 
     }
 
@@ -142,7 +142,7 @@ public class BrotherPrintModule: Module {
           }
 
           printSettings.customPaperSize = customPaperSize
-          let printError = printerDriver.printPDF(with: myUrl!, settings: printSettings)
+          let printError = printerDriver.printPDF(with: url!, settings: printSettings)
           
           if printError.code != .noError {
               promise.resolve("Error - Print PDF: \(printError.code)")
