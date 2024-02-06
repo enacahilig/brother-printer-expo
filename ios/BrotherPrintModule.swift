@@ -26,6 +26,8 @@ public class BrotherPrintModule: Module {
       #endif 
     }
 
+
+
     AsyncFunction("startSearchBluetoothPrinter") { (promise: Promise) in
       #if targetEnvironment(simulator)
         promise.resolve("Cannot find printers via bluetooth when using a simulator.");    
@@ -33,7 +35,7 @@ public class BrotherPrintModule: Module {
         let devices = BRPtouchBluetoothManager.shared().pairedDevices()  as! [BRPtouchDeviceInfo]; //discover bluetooth printers
 
         let foundPrinters: NSMutableArray = []
-        for deviceInfo in devices { //there should only be one
+         for deviceInfo in devices { //there should only be one
             if let deviceInfo = deviceInfo as? BRPtouchDeviceInfo {
               let printerObject: NSMutableDictionary = [:]
               printerObject["modelName"] = deviceInfo.strModelName
@@ -46,6 +48,32 @@ public class BrotherPrintModule: Module {
       #endif 
     }
 
+
+    AsyncFunction("startSearchBluetoothPrinter2") { (promise: Promise) in
+      #if targetEnvironment(simulator)
+        promise.resolve("Cannot find printers via bluetooth when using a simulator.");    
+      #else
+       let foundPrinters: NSMutableArray = []
+       let option = BRLMBLESearchOption()
+            option.searchDuration = 15
+            let result = BRLMPrinterSearcher.startBLESearch(option) { channel in
+                let modelName = channel.extraInfo?.value(forKey: BRLMChannelExtraInfoKeyModelName) as? String ?? ""
+                let serialNumber = channel.extraInfo?.value(forKey: BRLMChannelExtraInfoKeySerialNumber) as? String ?? ""
+                let advertiseLocalName = channel.channelInfo
+                let printerObject: NSMutableDictionary = [:]
+                printerObject["modelName"] = modelName
+                printerObject["printerName"] = advertiseLocalName
+                printerObject["serialNumber"] = serialNumber
+                foundPrinters.add(printerObject)
+                print("Model : \(modelName), AdvertiseLocalName: \(advertiseLocalName)")
+                
+            }
+            promise.resolve(foundPrinters);
+      #endif 
+    }
+
+    
+
     AsyncFunction("printSamplePDF") { (strModelName: String, strSerialNumber: String,  strPrinterName: String, promise: Promise) in
         #if targetEnvironment(simulator)
           promise.resolve("Cannot print PDF when using a simulator.");    
@@ -55,7 +83,7 @@ public class BrotherPrintModule: Module {
           let generateResult = BRLMPrinterDriverGenerator.open(channel)
           guard generateResult.error.code == BRLMOpenChannelErrorCode.noError,
               let printerDriver = generateResult.driver else {
-                resolve("Error - Open Channel: \(generateResult.error.code)")
+                 promise.resolve("Error - Open Channel: \(generateResult.error.code)")
                 return
               }
           defer {
@@ -80,17 +108,17 @@ public class BrotherPrintModule: Module {
               guard
                 let printSettings = BRLMRJPrintSettings(defaultPrintSettingsWith: BRLMPrinterModel.RJ_4230B)
               else {
-                resolve("Error - PDF file is not found.")
+                 promise.resolve("Error - PDF file is not found.")
                 return
               }
               printSettings.customPaperSize = customPaperSize
               let printError = printerDriver.printPDF(with: myUrl!, settings: printSettings)
               
               if printError.code != .noError {
-                  resolve("Error - Print PDF: \(printError.code)")
+                  promise.resolve("Error - Print PDF: \(printError.code)")
               }
               else {
-                  resolve("Success - Print PDF")
+                   promise.resolve("Success - Print PDF")
               }
           }
           else { //default to desktop printer
@@ -98,17 +126,17 @@ public class BrotherPrintModule: Module {
               guard
                 let printSettings = BRLMTDPrintSettings(defaultPrintSettingsWith: BRLMPrinterModel.TD_4550DNWB)
               else {
-                resolve("Error - PDF file is not found.")
+                 promise.resolve("Error - PDF file is not found.")
                 return
               }
               printSettings.customPaperSize = customPaperSize
               let printError = printerDriver.printPDF(with: myUrl!, settings: printSettings)
               
               if printError.code != .noError {
-                  resolve("Error - Print PDF: \(printError.code)")
+                   promise.resolve("Error - Print PDF: \(printError.code)")
               }
               else {
-                  resolve("Success - Print PDF")
+                  promise.resolve("Success - Print PDF")
               }
           }
         #endif 

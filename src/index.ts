@@ -5,7 +5,7 @@ export function startSearchWiFiPrinter(): string {
 }
 
 export function startSearchBluetoothPrinter() {
-  return BrotherPrint.startSearchBluetoothPrinter();
+  return BrotherPrint.startSearchBluetoothPrinter2();
 }
 
 export function printSamplePDF(

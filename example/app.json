@@ -16,7 +16,15 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "expo.modules.brotherprint.example"
+      "bundleIdentifier": "expo.modules.brotherprint.example",
+      "infoPlist": {
+        "NSBluetoothAlwaysUsageDescription": "This app uses the camera to scan barcodes on event tickets.",
+        "NSBluetoothPeripheralUsageDescription": "This app uses the camera to scan barcodes on event tickets.",
+        "UISupportedExternalAccessoryProtocols": [
+          "com.brother.ptcbp"
+        ],
+        "NSLocalNetworkUsageDescription": "This app uses local network to communicate to BrotherPRinter"
+      }
     },
     "android": {
       "adaptiveIcon": {
