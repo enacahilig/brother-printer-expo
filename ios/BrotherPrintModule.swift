@@ -89,7 +89,13 @@ public class BrotherPrintModule: Module {
 
     AsyncFunction("printSamplePDF") {( modelName: String, ipAddress: String, serialNumber: String, printerType: String, promise: Promise) in
         #if targetEnvironment(simulator)
-          promise.resolve("Cannot print PDF when using a simulator.");    
+          guard
+              let url = Bundle.main.url(forResource: "samplepdf2", withExtension: "pdf")
+              else {
+                  promise.resolve("Error - PDF file is not found.")
+                  return
+            }
+          promise.resolve("Cant print pdf \(url)");    
         #else
 
           let channel = "";
@@ -103,7 +109,7 @@ public class BrotherPrintModule: Module {
           let generateResult = BRLMPrinterDriverGenerator.open(channel)
           guard generateResult.error.code == BRLMOpenChannelErrorCode.noError,
               let printerDriver = generateResult.driver else {
-                resolve("Error - Open Channel: \(generateResult.error.code)")
+                promise.resolve("Error - Open Channel: \(generateResult.error.code)")
                 return
               }
           defer {
@@ -122,7 +128,7 @@ public class BrotherPrintModule: Module {
           guard
               let url = Bundle.main.url(forResource: "samplepdf2", withExtension: "pdf")
               else {
-                  resolve("Error - PDF file is not found.")
+                  promise.resolve("Error - PDF file is not found.")
                   return
             }
 
@@ -139,10 +145,10 @@ public class BrotherPrintModule: Module {
           let printError = printerDriver.printPDF(with: myUrl!, settings: printSettings)
           
           if printError.code != .noError {
-              resolve("Error - Print PDF: \(printError.code)")
+              promise.resolve("Error - Print PDF: \(printError.code)")
           }
           else {
-              resolve("Success - Print PDF")
+              promise.resolve("Success - Print PDF")
           }
         #endif 
       }
