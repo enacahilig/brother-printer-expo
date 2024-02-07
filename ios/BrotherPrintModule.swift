@@ -65,19 +65,15 @@ public class BrotherPrintModule: Module {
 
     AsyncFunction("printSamplePDF") {( modelName: String, ipAddress: String, serialNumber: String, printerType: String, strFilePath: String, promise: Promise) in
         #if targetEnvironment(simulator)
-          guard
-              // let url = Bundle.main.url(forResource: "samplepdf2", withExtension: "pdf")
-                 let myUrlString = "file:///private/" + strFilePath,
-                 let url = URL(string: myUrlString)
-    
-              else {
-                  promise.resolve("Error1 - PDF file is not found.")
-                  return
-            }
-          promise.resolve("Cant print pdf \(url)");    
+        let myUrlString = "file:///private/" + strFilePath
+        guard let url = URL(string: myUrlString) else {
+            promise.resolve("Error2 - PDF file is not found.")
+            return
+        }
+          promise.resolve("Cant print pdf \(url)");
         #else
         print("modelName: \(modelName) ipAddress: \(ipAddress) serialNumber: \(serialNumber) printerType: \(printerType)");
-          
+        
           let channel = BRLMChannel(bluetoothSerialNumber: serialNumber)
 
           let generateResult = BRLMPrinterDriverGenerator.open(channel)
@@ -93,27 +89,32 @@ public class BrotherPrintModule: Module {
         // print("url \(url)");
         
         
-          guard
-              // let url = Bundle.main.url(forResource: "samplepdf2", withExtension: "pdf"),
-              let myUrlString = "file:///private/" + strFilePath,
-              let url = URL(string: myUrlString),
-              let printSettings = BRLMTDPrintSettings(defaultPrintSettingsWith: BRLMPrinterModel.RJ_4230B)
-              else {
-                  
-                  promise.resolve("Error2 - PDF file is not found.")
-                  return
-          }
+        let myUrlString = "file:///private/" + strFilePath
+        guard let url = URL(string: strFilePath) else {
+            promise.resolve("Error2 - PDF file is not found.")
+            return
+        }
+        let printerSerieseFromModel = BRLMPrinterClassifier.transferEnum(from:modelName)
+        
+            print("printerSerieseFromModel \(printerSerieseFromModel)")
+            let printSettings = BRLMRJPrintSettings(defaultPrintSettingsWith: BRLMPrinterModel.RJ_4230B)
+//            let printSettings = BRLMTDPrintSettings(defaultPrintSettingsWith: BRLMPrinterModel.RJ_4230B)
+            
+        let defaultPrintSettings = BRLMRJPrintSettings() // Initialize with default values
 
           // Set your paper information
-          let margins = BRLMCustomPaperSizeMargins(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
-          let customPaperSize = BRLMCustomPaperSize(rollWithTapeWidth: 2.0,
-                                                      margins: margins,
-                                                      unitOfLength: .inch)
-          printSettings.customPaperSize = customPaperSize
+          let margins = BRLMCustomPaperSizeMargins(top: 0.12, left: 0.06, bottom: 0.12, right: 0.06)
 
-          let printError = printerDriver.printPDF(with: url, settings: printSettings)
+        let customPaperSize = BRLMCustomPaperSize(dieCutWithTapeWidth: 4, tapeLength: 6, margins: margins, gapLength: 0.125, unitOfLength: .inch)
+            printSettings?.customPaperSize = customPaperSize
+            printSettings?.numCopies = 1
+         
+        let printError = printerDriver.printPDF(with: url, settings: printSettings ?? defaultPrintSettings)
+
+
 
           if printError.code != .noError {
+              print("Error - Print PDF: \(printError.code)")
             promise.resolve("Error - Print Image: \(printError.code)")
           }
           else {

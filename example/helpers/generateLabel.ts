@@ -1,5 +1,5 @@
 /* @flow */
-import {generateBarCode, generateQrCode} from './generateQrCode';
+import {generateBarCode, generateQrCode} from './generateQRCode';
 
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 // import Promise from 'react-native/Libraries/Promise';
@@ -42,8 +42,8 @@ export default async (items: Array<ContainerItem>): Promise<any> => {
 };
 
 const getItemWithQrImg = async (item: ContainerItem): Promise<LabelItem> => {
-  const qrCodeImage = await generateQrCode(item?.QRCodeURL || item.BarCode);
-  const barcodeImage = await generateBarCode(item.BarCode);
+  const qrCodeImage = await generateQrCode(item?.QRCodeURL || item.BarCode || '');
+  const barcodeImage = await generateBarCode(item.BarCode || '');
   return {...item, qrCodeImage, barcodeImage};
 };
 /*----------------------------------------------------------------

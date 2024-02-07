@@ -13,6 +13,8 @@ import {
   useColorScheme,
 } from "react-native";
 import { Colors } from "react-native/Libraries/NewAppScreen";
+import generateLabel from "./helpers/generateLabel";
+import * as FileSystem from 'expo-file-system';
 
 export default function App() {
   const isDarkMode = useColorScheme() === "dark";
@@ -73,8 +75,8 @@ export default function App() {
 
 
     const testingContainer = {
-      BarCode: "123456789",
-      ContractorNameText: "Cotnractor Text Text",
+      BarCode: "1234563789",
+      ContractorNameText: "Test Test Text Text",
       DeckText: "Deck TExt ",
       FwdMidAftText: " FWd Aft Text",
       LoadingDateText: "Test Loading Text",
@@ -90,22 +92,38 @@ export default function App() {
 
     // alert('onTestPrint');
     if (selectedPrinter) {
-      alert(JSON.stringify(selectedPrinter));
+      console.log('selectedPrinter', selectedPrinter);
+      // alert(JSON.stringify(selectedPrinter));
       //return; //uncomment this line when testing and you want to conserve label paper by not printing
 
-      const labelPDF = await generateLabelPDF([
+     try {
+
+
+      const labelPDF = await generateLabel([
         testingContainer,
       ]);
+      console.log('labelPDF', labelPDF)
 
-
-      const status = await BrotherPrint.printSamplePDF(
+      const results = await FileSystem.getInfoAsync(FileSystem.bundleDirectory+'/assets/samplepdf2.pdf');
+      console.log('results', results)
+      
+      await BrotherPrint.printSamplePDF(
         selectedPrinter.modelName,
         selectedPrinter.ipAddress,
         selectedPrinter.serialNumber,
         selectedPrinter.type,
         labelPDF.filePath
       );
-      alert(`Printing response: ${status}`);
+
+      // alert(`Printing response: ${status}`);
+      // console.log('status', status);
+
+     } catch (error) {
+      console.log('error w/ generating label', error)
+     }
+
+
+      
     } else {
       alert(`Please select a printer.`);
     }
@@ -202,10 +220,3 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
-function generateLabelPDF(arg0: {
-  BarCode: string; ContractorNameText: string; DeckText: string; FwdMidAftText: string; LoadingDateText: string; Multiples: string; PoNumberText: string; PrintedByText: string; QRCodeURL: string; SideText: string; ShipmentID: string; Description: string; //essentially the ContainerNum everything to the left of the "_"
-  ContainerTypeName: string;
-}[]) {
-  throw new Error("Function not implemented.");
-}
-

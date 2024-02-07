@@ -23,6 +23,5 @@ export function printSamplePDF(
     serialNumber,
     printerType,
     strFilePath,
-
   );
 }
